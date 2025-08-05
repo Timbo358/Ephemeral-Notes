@@ -18,19 +18,19 @@ jobs:
         distribution: 'temurin'
         java-version: 17
 
-    # Removed setup-android step due to invalid inputs
+    # Set up the Android SDK with default packages
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v3
 
     - name: Decompress project
       run: tar -xzf EphemeralNotes.tar.gz
 
-    - name: Generate Gradle wrapper
-      run: |
-        cd EphemeralNotes
-        gradle wrapper
-
     - name: Build debug APK
       run: |
         cd EphemeralNotes
+        # Ensure Gradle wrapper is executable
+        chmod +x gradlew
+        # Build the debug APK
         ./gradlew assembleDebug
 
     - name: Upload debug APK
