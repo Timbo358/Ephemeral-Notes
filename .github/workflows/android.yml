@@ -18,13 +18,7 @@ jobs:
         distribution: 'temurin'
         java-version: 17
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-      with:
-        api-level: 33
-        target: google_apis
-        build-tools: 33.0.2
-        ndk: ""
+    # Removed setup-android step due to invalid inputs
 
     - name: Decompress project
       run: tar -xzf EphemeralNotes.tar.gz
