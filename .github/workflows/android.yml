@@ -1,0 +1,46 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: 17
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+      with:
+        api-level: 33
+        target: google_apis
+        build-tools: 33.0.2
+        ndk: ""
+
+    - name: Decompress project
+      run: tar -xzf EphemeralNotes.tar.gz
+
+    - name: Generate Gradle wrapper
+      run: |
+        cd EphemeralNotes
+        gradle wrapper
+
+    - name: Build debug APK
+      run: |
+        cd EphemeralNotes
+        ./gradlew assembleDebug
+
+    - name: Upload debug APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-debug
+        path: EphemeralNotes/app/build/outputs/apk/debug/app-debug.apk
